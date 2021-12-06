@@ -60,31 +60,45 @@ for index in range(len(data[0])):
 oxy_array = list(data)
 prev_oxy = oxy_array
 
-print(str_gamma, type(str_gamma))
-
-max_count_similar = 0
-
 oxy_gen = ''
 co2 = ''
+good_gamma = [int(x) for x in gamma]
+good_epsi = [int(x) for x in epsi]
+
+print(good_gamma, good_epsi)
 
 
-def calc_oxco2(operator):
+def calc_oxco2(operator, input):
     max_count_similar = 0
 
-    bin_and = str_gamma & int(number)
-    count_similar = 0
+    variable = -float('inf')
 
-    for digit in str(bin_and):
-        if digit != '1':
-            count_similar += 1
-        else:
-            break
+    for number in data:
+        count = 0
+        # print(number, str_gamma, bin_and)
+        # print(type(number), type(str_gamma), type(bin_and))
 
-    if operator(count_similar, max_count_similar):
-        max_count_similar = count_similar
-        co2 = number
+        for digit in range(len(number)):
+            if operator(number[digit], input[digit]):
+                count += 1
+            else:
+                print('reached_break')
+                break
+
+            if count > max_count_similar:
+                max_count_similar = count
+                variable = number
+
+    print(variable, operator)
+    return variable
 
 
+#
+print(calc_oxco2(operator.eq, good_gamma) * calc_oxco2(operator.ne, good_epsi))
+#
+# calc_oxco2(operator.ne)
+# 15 30
+# 2050947
 print(oxy_gen, 'here oxy')
 print(co2, 'here co2')
 
