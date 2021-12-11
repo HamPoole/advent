@@ -6,9 +6,7 @@ with open(file="/home/urthor/projects/advent_of_code/advent_2021/day11/input11")
 cleaned_matrix = [x[:-1] for x in input_file]
 
 for index in range(len(cleaned_matrix)):
-    print(cleaned_matrix[index], type(cleaned_matrix[index]))
     cleaned_matrix[index] = list((map(int, cleaned_matrix[index])))
-    print(cleaned_matrix[index])
 
 clean_flashed = copy.deepcopy(cleaned_matrix)
 clean_flashed = [[0 for x in y] for y in clean_flashed]
