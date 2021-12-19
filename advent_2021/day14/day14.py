@@ -39,17 +39,13 @@ def hash_table_pass(x):
     memoizer[x] = mapping
     return return_string
 
+
 for index in range(1, len(first_line)):
 
 
-def counetr_pass(a_counter):
 
 
-
-
-
-
-problem_input = str(first_line)
+    problem_input = str(first_line)
 
 for number in range(10):
     print(number, "up to this")
