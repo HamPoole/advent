@@ -23,10 +23,8 @@ for index in range(40):
 
 # For each pair:
 # Copy the current number of pairs
-# Then for each pair, minues all the values of the count of that pair.
-# Then += 1 to the two rules that are made up from the input character + result character, for the two different pairs
-# Then you have the counts
-# Trick is efficient use of counters
+# Take all the values from that pair, then add those values to the pairs "pair first + result"
+# Trick in efficient use of counters is really difficult to get.
 
 
 print(max(chars.values()) - min(chars.values()))

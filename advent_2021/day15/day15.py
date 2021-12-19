@@ -1,8 +1,15 @@
+import copy
+import heapq
 from collections import defaultdict
 
-input15 = open("/Users/urthor/projects/advent/advent_2021/day15/input15")
+"""
+Destination value is the edge weight
 
-matrix = input15.read().split('\n')
+"""
+
+lines = open("/home/urthor/projects/advent_of_code/advent_2021/day15/input15").read().split('\n')
+
+matrix = [list(map(int, row)) for row in lines]
 
 
 def print_matrix(matrix):
@@ -23,26 +30,57 @@ def get_neighbours(matrix, x, y):
             yield neighbour_x, neighbour_y
 
 
-print_matrix(matrix)
+visited = copy.deepcopy(matrix)
+visited = [[-1 for x in row] for row in visited]
+weights = copy.deepcopy(matrix)
+
+moves = [(-1, 0), (0, -1), (1, 0), (0, 1)]
 
 
 def dijkstra(matrix):
-    height, width = len(matrix), len(matrix[0])
+    height = len(matrix)
+    width = len(matrix[0])
     source = (0, 0)
-    destination_coords = (height -1, width - 1)
+    destination = matrix[-1][-1]
 
-    queue = [(0, source)] # A list can be a queue if you just treat the back as the end.
-    mindist = defaultdict(lambda: int(float('inf')), {source: 0})
-    # Above is a dictionary with a default value for key not found.
-    # If a key is not found in dictionary returns error
+    def node_with_source_dist(*, dist_from_source, node: tuple):
+        return {node: dist_from_source}
+
+    queue_to_visit = [(dist_from_source=0, node=(0, 0))]
+    min_distance = defaultdict(lambda: (float('inf'), node_with_source_dist(dist_from_source=0, node=source)))
+
     visited = set()
 
-    while queue:
+    while queue_to_visit:
+        current_distance, node = heapq.heappop(queue_to_visit)
 
-        current_distance_from_source, current_node_coords = heapq.heappop(queue)
+        if node == destination:
+            return current_distance
 
-        if current_node_coords == destination_coords:
-            return current_distance_from_source
-
-        if current_node_coords in visited:
+        if node in visited:
             continue
+
+        visited.add(node)
+
+        row, col = node  # row and col are better than x and y because the y is first in a row wise array
+
+        for neighbour in get_neighbours(matrix, row, col):
+
+            if neighbour in visited:
+                continue
+
+            neighbour_row, neighbour_col = neighbour
+
+            new_distance = current_distance + matrix[neighbour_row][neighbour_col]
+            # Calculate total distance from source by getting the current total of weights and the weight of neighbour
+
+            if new_distance < min_distance[neighbour]:
+                min_distance[neighbour] = new_distance
+                heapq.heappush(queue_to_visit, node_with_source_dist(dist_from_source=new_distance, node=neighbour))
+
+    return "No path"
+
+
+min_dist = dijkstra(matrix)
+
+print("pt1", min_dist)
